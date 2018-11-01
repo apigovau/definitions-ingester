@@ -21,6 +21,7 @@
 
 
         <script src="js/jquery.min.js"></script>
+        <script src="js/FileSaver.min.js"></script>
         <script src="js/papaparse.js"></script>
 
     
@@ -107,6 +108,16 @@
     </form>
 -->
 <H3>Let's go</H3>
+		
+	<div class="inputGroup">
+		<label>What is your information domain called?</label>
+        <input type="text" class="au-text-input" id="domainName" />
+	</div>
+	<div class="inputGroup">
+		<label>And it's acronym?</label>
+        <input type="text" class="au-text-input" id="domainAcronym" />
+	</div>
+
 <div class="upload-btn-wrapper">
   <button class="au-btn">Upload a file</button>
   <input type="file" id="myfiles" />
@@ -124,7 +135,7 @@
 	<h4>How this works:</h4>
 	<p>Here you get to choose which column from your data maps to which field in the data model</p>
 	<p>Enter the letter of the column (so, if you wanted to map the first column, you would enter the letter 'a')</p>
-	<p>Any text you enter that doesn't match a column will be hard-coded for that value for each of your definitions</p>
+	<p>Any text you enter that doesn't match a column will be hard-coded to that value for each of your definitions</p>
 	<p>Leaving a field blank will make that field empty</p>
 	<p>The only special field is 'Identifier'. If it's not mapped to a column, I'll automatically add a unique number to the back of whatever you have in this field</p>
 	<p></p>
@@ -211,7 +222,7 @@ var fireup=function(){
   			    console.log("Parsing failed:", results, file);
 			},
 			download: false,
-			skipEmptyLines: false,
+			skipEmptyLines: 'greedy',
 			chunk: undefined,
 			fastMode: undefined,
 			beforeFirstChunk: undefined,
@@ -239,7 +250,10 @@ function drawPreview(inResults){
 
 
 	view.append( `<p>I found ${results.data.length} rows in that file</p>` );
+	
 	view.append( `<p>Here are the first ${previewCount} (I've truncated some of the longer bits)</p>` );
+
+	//view.append( `<div class="hasheaders"><input id="hadHead" type="checkbox"/><span>My data has headers</span></div>` );
 
 	var table = $("<table class='dataPreview'>")
 	cols = results.data[0].length
@@ -265,9 +279,11 @@ function drawPreview(inResults){
 }
 
 
+var formJSON = {}	
 var mappingsChanged=function(){ 
+	var acronym = $("#domainAcronym").val()
+	formJSON = {}
 	var formArray = $("#mappings").serializeArray()
-	var formJSON = {}	
 	for(var i = 0; i < formArray.length; i++){
 		var theValue = formArray[i].value
 		formJSON[formArray[i].name] = {rawValue : formArray[i].value, mapped : false}
@@ -291,14 +307,41 @@ var mappingsChanged=function(){
 		view.append(`<p><b>Name:</b> ${definition["name"]}</p>`)
 		view.append(`<p><b>Status:</b> ${definition["status"]}</p>`)
 		var theId = definition["identifier"]
-		if(theId.indexOf("!") >= 0) theId = theId.replace("!", i +  1)
+		if(theId.indexOf("!") >= 0) theId = `http://api.gov.au/definition/${acronym}/` + theId.replace("!", i +  1)
 		view.append(`<p><b>Identifier:</b> ${theId}</p>`)
 		view.append(`<p><b>Definition:</b> ${definition["definition"]}</p>`)
 		view.append(`<p><b>Guidance:</b> ${definition["guidance"]}</p>`)
 		view.append(`<p><b>Type:</b> ${definition["datatype"]["type"]}</p>`)
 	}
+
+	view.append("<h1>Happy ?</h1>")
+	view.append('<button class="au-btn" onclick="doDownload()">Download your definitions</button>')
 }
 
+
+var doDownload = function(){
+  var output = {
+  domain: $("#domainName").val(),
+  acronym: $("#domainAcronym").val(),
+  version: "2018-02-07_15:54"
+}
+
+	content = []	
+	for (var i = 0; i < results.data.length; i++) { 
+		var definition = mapRowUsingConfig(results.data[i], formJSON)
+		definition["domain"] = output["domain"]
+		var theId = definition["identifier"]
+		if(theId.indexOf("!") >= 0) theId = "http://api.gov.au/definition/" + output["acronym"] + "/" + theId.replace("!", i +  1)
+		definition["identifier"] = theId
+		content.push(definition)
+	}
+
+	output["content"] = content
+	var blob = new Blob([JSON.stringify(output)], {
+		type: "text/plain;charset=utf-8;",
+	});
+	saveAs(blob, "definitions.json");
+}
 
 var mapRowUsingConfig=function(row, config){
 	// ["DM26", "AustralianStatesTerritoriesAndOffShoreAreasDimension"]
