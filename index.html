@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    
+  <title>Definitions Catalogue</title>
+  
+        <link rel="icon" type="image/png" href="img/favicon-196x196.png" sizes="196x196" />
+        <link rel="icon" type="image/png" href="img/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="img/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="img/favicon-128.png" sizes="128x128" />
+    
+  
+        <link rel="stylesheet" href="css/furnace.min.css" />
+        <link rel="stylesheet" href="css/custom.css" />
+        <link rel="stylesheet" href="css/common.css" />
+
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/papaparse.js"></script>
+
+    
+</head>
+<body class="au-body au-grid">
+
+
+    <section class="phase-banner">
+        <div class="wrapper au-grid container container-fluid">
+            This is an <a href="https://www.dta.gov.au/standard/service-design-and-delivery-process/" class="dss_stage_link">alpha</a>. If you find something wrong, <a href="https://github.com/govau/api-gov-au-definitions/issues/new" class="dss_stage_link">let us know</a>
+        </div>
+    </section>
+    <header class="au-grid au-header au-header--hero au-header--dark hero_header" role="banner">
+            <div class="container">
+
+                
+                        <img class="hero_logo au-responsive-media-img" alt="Australian Government logo" src="img/header-logo-agov.png" />
+                        <h1 class="au-header-heading">
+                            Definitions Catalogue Ingester
+                            <span class="badge">ALPHA</span>
+                            <div class="au-header__subline">
+                                    <p>Getting your data into the Definitions Catalogue.</p>
+                            </div>
+                        </h1>
+                
+                
+            </div>
+
+            <nav class="au-main-nav" aria-label="main navigation">
+                <input type="checkbox" id="menu">
+                    <label for="menu">☰ Menu</label>
+                </input>
+               <div class="container">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div id="main-nav-default" class="au-main-nav__content">
+                           <div class="au-main-nav__menu">
+                              <div class="au-main-nav__menu-inner">
+                                 <div class="au-main-nav__focus-trap-top"></div>
+<!--
+                                 <ul class="au-link-list">
+                                         <li><a href="">Search</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="/" rel="external">api.gov.au</a></li>
+                                    <li><a href="https://ausdx.io" rel="external">Digital Community Playbook</a></li>
+                                    <li class="githubLink"><a href="https://github.com/govau/api-gov-au-definitions">Github</a></li>
+                                 </ul>
+                                 <div class="au-main-nav__focus-trap-bottom"></div>
+-->
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </nav>
+        </header>
+
+
+
+<main class="container">
+	<h1>How this works</h1>
+	<p>The ingester lets you upload a CSV file from your computer, and will help you massage the data so it can be included into the Definitions Catalogue</p>
+<!--
+	<p>Here's what's going to happen:</p>
+	<ol>
+		<li>You choose a CSV file from your computer</li>
+		<li>The Ingester will read the data and show you a preview of the first couple of rows</li>
+		<li>You will then need to choose which colums map to which fields of a data definition in the catalogue</li>
+		<li>As you update the mappings, the Ingester will give you a preview of what your definitions would look like</li>
+		<li>When you're happy, press the GO button</li>
+	</ol>
+
+<hr/>
+-->
+<!--
+    <form action="" method="get">
+		<p>Choose a </p>
+		<input id="fileItem" type="file" class=".au-btn"/>
+        <input type="text" placeholder="what are you looking for?" class="au-text-input main_search_bar" id="query" name="query" value="" />
+        <input type="submit" value="Search" class="au-btn main_search_button" />
+        <label class="filterBox au-btn" for="_1">Filters</label>
+        <input id="_1" type="checkbox" />
+    </form>
+-->
+<H3>Let's go</H3>
+<div class="upload-btn-wrapper">
+  <button class="au-btn">Upload a file</button>
+  <input type="file" id="myfiles" />
+</div>
+<div>
+	<p id="chosenFile">Select a file to fire up the Ingester</p>
+</div>
+
+<div id="previewView">
+</div>
+
+    
+<div id="mappingView" style="display:none">
+	<H3>Map your columns to the Definitions Catalogue model</H3>
+	<h4>How this works:</h4>
+	<p>Here you get to choose which column from your data maps to which field in the data model</p>
+	<p>Enter the letter of the column (so, if you wanted to map the first column, you would enter the letter 'a')</p>
+	<p>Any text you enter that doesn't match a column will be hard-coded for that value for each of your definitions</p>
+	<p>Leaving a field blank will make that field empty</p>
+	<p>The only special field is 'Identifier'. If it's not mapped to a column, I'll automatically add a unique number to the back of whatever you have in this field</p>
+	<p></p>
+	</p>The preview below will update as you change the fields</p>
+
+
+    <form id="mappings" action="" method="get">
+		<p>Fields in the Defintions Catalogue model:</p>
+		<div class="inputGroup">
+			<label>Name</label>
+        	<input type="text" class="au-text-input" name="name" />
+		</div>
+		<div class="inputGroup">
+			<label>Status</label>
+        	<input type="text" class="au-text-input" name="status" />
+		</div>
+		<div class="inputGroup">
+			<label>Definition</label>
+        	<input type="text" class="au-text-input" name="definition" />
+		</div>
+		<div class="inputGroup">
+			<label>Guidance</label>
+        	<input type="text" class="au-text-input" name="guidance" />
+		</div>
+		<div class="inputGroup">
+			<label>Identifier</label>
+        	<input type="text" class="au-text-input" name="identifier" />
+		</div>
+		<div class="inputGroup">
+			<label>Datatype</label>
+        	<input type="text" class="au-text-input" name="datatype" />
+		</div>
+    </form>
+</div>
+
+<div id="exampleView">
+</div>
+
+</main>
+    <footer class="au-footer footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 ie_footer_hook">
+                        <img class="au-responsive-media-img coat-of-arms" alt="api.gov.au logo" src="img/hero_logo.png" />
+                    <div class="joint-initiative">
+                        A joint initiative of the <a href="https://dta.gov.au">Digital&nbsp;Transformation&nbsp;Agency</a> and <a href="https://sbr.gov.au">Standard&nbsp;Business&nbsp;Reporting</a>
+                    </div>
+                </div>
+                <div class="col-sm-8 ie_footer_hook footer-phrase">
+                    <p class="copyright">© Commonwealth of Australia. With the exception of the Commonwealth Coat of Arms and where otherwise noted, this work is licensed under the <a href="https://github.com/govau/api-gov-au-definitions">MIT license</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+<script>
+
+
+var fireup=function(){ 
+    var file = document.querySelector("#myfiles").files[0];
+	$('#chosenFile').text(file.name)
+
+
+	var config = {
+			delimiter: "",    // auto-detect
+			newline: "",    // auto-detect
+			quoteChar: '"',
+			escapeChar: '"',
+			header: false,
+			trimHeaders: false,
+			dynamicTyping: false,
+			preview: 0,
+			encoding: "",
+			worker: false,
+			comments: false,
+			step: undefined,
+			complete: function(results, file) {
+ 			    console.log("Parsing complete:", results, file);
+				drawPreview(results);
+			},
+			error: function(results, file) {
+				alert("Sorry, I couldn't parse that file");
+  			    console.log("Parsing failed:", results, file);
+			},
+			download: false,
+			skipEmptyLines: false,
+			chunk: undefined,
+			fastMode: undefined,
+			beforeFirstChunk: undefined,
+			withCredentials: undefined,
+			transform: undefined
+    };
+
+
+	Papa.parse(file, config)
+
+}
+
+var cols= 0
+var results = {}
+var previewCount = 0
+function drawPreview(inResults){
+	$('#mappingView').show()
+	var view = $('#previewView')
+	view.empty()
+	view.append("<hr/>")
+
+	results = inResults
+	var rowCount = results.data.length
+	previewCount = Math.min(10, rowCount) 
+
+
+	view.append( `<p>I found ${results.data.length} rows in that file</p>` );
+	view.append( `<p>Here are the first ${previewCount} (I've truncated some of the longer bits)</p>` );
+
+	var table = $("<table class='dataPreview'>")
+	cols = results.data[0].length
+	var th = $("<tr></tr>")
+	for(var i = 0; i < cols; i ++){
+		th.append(`<td><b>${String.fromCharCode(97 + i)}</b></td>`)
+	}
+	table.append(th)
+
+	var truncLength = 20
+	for (var i = 0; i < previewCount; i++) { 
+		//view.append(`<p>Row ${i}: ${results.data[i][0]}`)
+		var tr = $("<tr></tr>")
+		for(var j = 0; j < cols; j ++){
+			var truncated = results.data[i][j]
+			if(truncated.length > truncLength) truncated = truncated.substring(0,truncLength - 3) + "..."
+			tr.append(`<td>${truncated}</td>`)
+		}
+		table.append(tr)
+	}
+	view.append(table)
+	view.append("<hr/>")
+}
+
+
+var mappingsChanged=function(){ 
+	var formArray = $("#mappings").serializeArray()
+	var formJSON = {}	
+	for(var i = 0; i < formArray.length; i++){
+		var theValue = formArray[i].value
+		formJSON[formArray[i].name] = {rawValue : formArray[i].value, mapped : false}
+		if((theValue.length == 1) && (theValue.charCodeAt(0) - 97 >= 0) && (theValue.charCodeAt(0) - 97 < cols)){
+			console.log(`Found mappping: ${formArray[i].name}, ${theValue}`)
+			formJSON[formArray[i].name]["column"] = theValue.charCodeAt(0) - 97
+			formJSON[formArray[i].name]["mapped"] = true
+		}
+		
+	}
+	/*
+	console.log(formJSON)
+	console.log(results.data[0])
+	console.log(mapRowUsingConfig(results.data[0], formJSON))
+	*/
+	var view = $('#exampleView')
+	view.empty()
+	for (var i = 0; i < Math.min(3,previewCount); i++) { 
+		var definition = mapRowUsingConfig(results.data[i], formJSON)
+		view.append(`<hr/>`)	
+		view.append(`<p><b>Name:</b> ${definition["name"]}</p>`)
+		view.append(`<p><b>Status:</b> ${definition["status"]}</p>`)
+		var theId = definition["identifier"]
+		if(theId.indexOf("!") >= 0) theId = theId.replace("!", i +  1)
+		view.append(`<p><b>Identifier:</b> ${theId}</p>`)
+		view.append(`<p><b>Definition:</b> ${definition["definition"]}</p>`)
+		view.append(`<p><b>Guidance:</b> ${definition["guidance"]}</p>`)
+		view.append(`<p><b>Type:</b> ${definition["datatype"]["type"]}</p>`)
+	}
+}
+
+
+var mapRowUsingConfig=function(row, config){
+	// ["DM26", "AustralianStatesTerritoriesAndOffShoreAreasDimension"]
+	// name: {rawValue: "a", mapped: true, column: 0}
+	// status: {rawValue: "", mapped: false}
+
+	var definition = {}
+	for (var property in config) {
+		if (config.hasOwnProperty(property)) {
+			if(config[property]["mapped"]){
+				definition[property] = row[config[property]["column"]]
+			}else{
+				definition[property] = config[property]["rawValue"]	
+			}
+		}
+	}
+	definition["datatype"] = {type:definition["datatype"], facets:{}}
+	definition["domain"] = ""
+	definition["usage"] = []
+	if(!config["identifier"]["mapped"])definition["identifier"] = definition["identifier"] + "!"
+	return definition
+}
+
+document.querySelector("#myfiles").onchange=fireup;
+document.querySelector("#mappings").onchange=mappingsChanged;
+
+</script>
+
+</body>
+</html>
+
