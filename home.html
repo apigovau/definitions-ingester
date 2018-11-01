@@ -85,39 +85,18 @@
 <main class="container">
 	<h1>How this works</h1>
 	<p>The ingester lets you upload a CSV file from your computer, and will help you massage the data so it can be included into the Definitions Catalogue</p>
-<!--
-	<p>Here's what's going to happen:</p>
-	<ol>
-		<li>You choose a CSV file from your computer</li>
-		<li>The Ingester will read the data and show you a preview of the first couple of rows</li>
-		<li>You will then need to choose which colums map to which fields of a data definition in the catalogue</li>
-		<li>As you update the mappings, the Ingester will give you a preview of what your definitions would look like</li>
-		<li>When you're happy, press the GO button</li>
-	</ol>
-
-<hr/>
--->
-<!--
-    <form action="" method="get">
-		<p>Choose a </p>
-		<input id="fileItem" type="file" class=".au-btn"/>
-        <input type="text" placeholder="what are you looking for?" class="au-text-input main_search_bar" id="query" name="query" value="" />
-        <input type="submit" value="Search" class="au-btn main_search_button" />
-        <label class="filterBox au-btn" for="_1">Filters</label>
-        <input id="_1" type="checkbox" />
-    </form>
--->
 <H3>Let's go</H3>
-		
-	<div class="inputGroup">
-		<label>What is your information domain called?</label>
-        <input type="text" class="au-text-input" id="domainName" />
-	</div>
-	<div class="inputGroup">
-		<label>And it's acronym?</label>
-        <input type="text" class="au-text-input" id="domainAcronym" />
-	</div>
-
+<H4>I need a little background information first:</h4>
+        <div class="backgroundinfo">	
+            <div class="inputGroup">
+                <label>What is your information domain called?</label>
+                <input type="text" class="au-text-input" id="domainName" />
+            </div>
+            <div class="inputGroup">
+                <label>And it's acronym?</label>
+                <input type="text" class="au-text-input" id="domainAcronym" />
+            </div>
+        </div>
 <div class="upload-btn-wrapper">
   <button class="au-btn">Upload a file</button>
   <input type="file" id="myfiles" />
@@ -132,13 +111,13 @@
     
 <div id="mappingView" style="display:none">
 	<H3>Map your columns to the Definitions Catalogue model</H3>
-	<h4>How this works:</h4>
 	<p>Here you get to choose which column from your data maps to which field in the data model</p>
-	<p>Enter the letter of the column (so, if you wanted to map the first column, you would enter the letter 'a')</p>
-	<p>Any text you enter that doesn't match a column will be hard-coded to that value for each of your definitions</p>
-	<p>Leaving a field blank will make that field empty</p>
-	<p>The only special field is 'Identifier'. If it's not mapped to a column, I'll automatically add a unique number to the back of whatever you have in this field</p>
-	<p></p>
+	<ul>
+        <li>Enter the letter of the column (so, if you wanted to map the first column, you would enter the letter 'a')</li>
+	    <li>Any text you enter that doesn't match a column will be hard-coded to that value for each of your definitions</li>
+	    <li>Leaving a field blank will make that field empty</li>
+	    <li>The only special field is 'Identifier'. If it's not mapped to a column, I'll automatically add a unique number to the back of whatever you have in this field</li>
+	</ul>
 	</p>The preview below will update as you change the fields</p>
 
 
@@ -263,9 +242,8 @@ function drawPreview(inResults){
 	}
 	table.append(th)
 
-	var truncLength = 20
+	var truncLength = 40
 	for (var i = 0; i < previewCount; i++) { 
-		//view.append(`<p>Row ${i}: ${results.data[i][0]}`)
 		var tr = $("<tr></tr>")
 		for(var j = 0; j < cols; j ++){
 			var truncated = results.data[i][j]
