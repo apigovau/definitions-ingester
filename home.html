@@ -141,7 +141,8 @@
 		</div>
 		<div class="inputGroup">
 			<label>Identifier</label>
-        	<input type="text" class="au-text-input" name="identifier" />
+			<label class="prependId" id="prependId">http://api.gov.au/definition/</label>
+        	<input id="identifierInput" type="text" class="au-text-input" name="identifier" />
 		</div>
 		<div class="inputGroup">
 			<label>Datatype</label>
@@ -218,6 +219,7 @@ var cols= 0
 var results = {}
 var previewCount = 0
 function drawPreview(inResults){
+    $('#prependId').text(`http://api.gov.au/definitions/${$("#domainAcronym").val()}/`)
 	$('#mappingView').show()
 	var view = $('#previewView')
 	view.empty()
@@ -272,11 +274,6 @@ var mappingsChanged=function(){
 		}
 		
 	}
-	/*
-	console.log(formJSON)
-	console.log(results.data[0])
-	console.log(mapRowUsingConfig(results.data[0], formJSON))
-	*/
 	var view = $('#exampleView')
 	view.empty()
 	for (var i = 0; i < Math.min(3,previewCount); i++) { 
@@ -284,8 +281,8 @@ var mappingsChanged=function(){
 		view.append(`<hr/>`)	
 		view.append(`<p><b>Name:</b> ${definition["name"]}</p>`)
 		view.append(`<p><b>Status:</b> ${definition["status"]}</p>`)
-		var theId = definition["identifier"]
-		if(theId.indexOf("!") >= 0) theId = `http://api.gov.au/definition/${acronym}/` + theId.replace("!", i +  1)
+		var theId = "http://api.gov.au/definition/" + $("#domainAcronym").val() + "/" + definition["identifier"].replace("http://api.gov.au/definition/","")
+		if(theId.indexOf("!") >= 0) theId = theId.replace("!", i +  1)
 		view.append(`<p><b>Identifier:</b> ${theId}</p>`)
 		view.append(`<p><b>Definition:</b> ${definition["definition"]}</p>`)
 		view.append(`<p><b>Guidance:</b> ${definition["guidance"]}</p>`)
@@ -308,8 +305,8 @@ var doDownload = function(){
 	for (var i = 0; i < results.data.length; i++) { 
 		var definition = mapRowUsingConfig(results.data[i], formJSON)
 		definition["domain"] = output["domain"]
-		var theId = definition["identifier"]
-		if(theId.indexOf("!") >= 0) theId = "http://api.gov.au/definition/" + output["acronym"] + "/" + theId.replace("!", i +  1)
+		var theId = "http://api.gov.au/definition/" + output["acronym"] + "/" + definition["identifier"].replace("http://api.gov.au/definition/","")
+		if(theId.indexOf("!") >= 0) theId = theId.replace("!", i +  1)
 		definition["identifier"] = theId
 		content.push(definition)
 	}
