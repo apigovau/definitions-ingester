@@ -387,12 +387,20 @@ td b {
 
 form .inputGroup {
     display: block;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 form .inputGroup label {
     display: inline-block;
     width: 80px;
+    float: left;
+    margin-top: 10px;
+}
+
+form .inputGroup label#prependId {
+    width: 252px;
+    color: blue;
+    text-align: right;
 }
 
 .backgroundinfo {
@@ -419,10 +427,14 @@ form .inputGroup label {
 #mappingView #mappings {
     background: #DDD;
     padding: 20px;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 #mappingView #mappings input {
-    width: 479px;
-    
+    width: 414px;
+    max-width: calc(100% - 50px);
+}
+
+#mappingView #mappings input#identifierInput {
+    width: 160px;
 }
